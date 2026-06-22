@@ -84,18 +84,18 @@ export function Header() {
               <button aria-label="Search" className="p-2 hover:text-gold transition">
                 <Search className="h-[18px] w-[18px]" />
               </button>
-              <Link to="/wishlist" aria-label="Wishlist" className="p-2 hover:text-gold transition hidden sm:inline-flex">
+              <a href="#" aria-label="Wishlist" className="p-2 hover:text-gold transition hidden sm:inline-flex">
                 <Heart className="h-[18px] w-[18px]" />
-              </Link>
-              <Link to="/account" aria-label="Account" className="p-2 hover:text-gold transition hidden sm:inline-flex">
+              </a>
+              <a href="#" aria-label="Account" className="p-2 hover:text-gold transition hidden sm:inline-flex">
                 <User className="h-[18px] w-[18px]" />
-              </Link>
-              <Link to="/cart" aria-label="Cart" className="p-2 hover:text-gold transition relative">
+              </a>
+              <a href="#" aria-label="Cart" className="p-2 hover:text-gold transition relative">
                 <ShoppingBag className="h-[18px] w-[18px]" />
                 <span className="absolute -top-0.5 -right-0.5 bg-gold text-black text-[10px] font-semibold rounded-full h-4 w-4 flex items-center justify-center">
                   0
                 </span>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -125,12 +125,12 @@ export function Header() {
               ))}
             </nav>
             <div className="mt-auto pt-6 flex flex-col gap-2">
-              <Link to="/account" onClick={() => setOpen(false)} className="text-sm py-2">
+              <a href="#" onClick={() => setOpen(false)} className="text-sm py-2">
                 Customer Login
-              </Link>
-              <Link to="/account" onClick={() => setOpen(false)} className="text-sm py-2 text-gold">
+              </a>
+              <a href="#" onClick={() => setOpen(false)} className="text-sm py-2 text-gold">
                 Register Account
-              </Link>
+              </a>
             </div>
           </div>
         </div>

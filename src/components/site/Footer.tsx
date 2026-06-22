@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Twitter, Youtube, Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
@@ -97,7 +96,7 @@ function FooterCol({ title, children }: { title: string; children: React.ReactNo
 function FooterLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link to={to} className="hover:text-gold transition-colors">{children}</Link>
+      <a href={to} className="hover:text-gold transition-colors">{children}</a>
     </li>
   );
 }

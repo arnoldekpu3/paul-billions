@@ -9,8 +9,56 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WomenRouteImport } from './routes/women'
+import { Route as ShopRouteImport } from './routes/shop'
+import { Route as NewArrivalsRouteImport } from './routes/new-arrivals'
+import { Route as MenRouteImport } from './routes/men'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CollectionsRouteImport } from './routes/collections'
+import { Route as AccessoriesRouteImport } from './routes/accessories'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WomenRoute = WomenRouteImport.update({
+  id: '/women',
+  path: '/women',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewArrivalsRoute = NewArrivalsRouteImport.update({
+  id: '/new-arrivals',
+  path: '/new-arrivals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MenRoute = MenRouteImport.update({
+  id: '/men',
+  path: '/men',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionsRoute = CollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessoriesRoute = AccessoriesRouteImport.update({
+  id: '/accessories',
+  path: '/accessories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +67,144 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
+  '/collections': typeof CollectionsRoute
+  '/contact': typeof ContactRoute
+  '/men': typeof MenRoute
+  '/new-arrivals': typeof NewArrivalsRoute
+  '/shop': typeof ShopRoute
+  '/women': typeof WomenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
+  '/collections': typeof CollectionsRoute
+  '/contact': typeof ContactRoute
+  '/men': typeof MenRoute
+  '/new-arrivals': typeof NewArrivalsRoute
+  '/shop': typeof ShopRoute
+  '/women': typeof WomenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
+  '/collections': typeof CollectionsRoute
+  '/contact': typeof ContactRoute
+  '/men': typeof MenRoute
+  '/new-arrivals': typeof NewArrivalsRoute
+  '/shop': typeof ShopRoute
+  '/women': typeof WomenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/accessories'
+    | '/collections'
+    | '/contact'
+    | '/men'
+    | '/new-arrivals'
+    | '/shop'
+    | '/women'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/accessories'
+    | '/collections'
+    | '/contact'
+    | '/men'
+    | '/new-arrivals'
+    | '/shop'
+    | '/women'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/accessories'
+    | '/collections'
+    | '/contact'
+    | '/men'
+    | '/new-arrivals'
+    | '/shop'
+    | '/women'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AccessoriesRoute: typeof AccessoriesRoute
+  CollectionsRoute: typeof CollectionsRoute
+  ContactRoute: typeof ContactRoute
+  MenRoute: typeof MenRoute
+  NewArrivalsRoute: typeof NewArrivalsRoute
+  ShopRoute: typeof ShopRoute
+  WomenRoute: typeof WomenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/women': {
+      id: '/women'
+      path: '/women'
+      fullPath: '/women'
+      preLoaderRoute: typeof WomenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/new-arrivals': {
+      id: '/new-arrivals'
+      path: '/new-arrivals'
+      fullPath: '/new-arrivals'
+      preLoaderRoute: typeof NewArrivalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/men': {
+      id: '/men'
+      path: '/men'
+      fullPath: '/men'
+      preLoaderRoute: typeof MenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collections': {
+      id: '/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof CollectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accessories': {
+      id: '/accessories'
+      path: '/accessories'
+      fullPath: '/accessories'
+      preLoaderRoute: typeof AccessoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +217,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AccessoriesRoute: AccessoriesRoute,
+  CollectionsRoute: CollectionsRoute,
+  ContactRoute: ContactRoute,
+  MenRoute: MenRoute,
+  NewArrivalsRoute: NewArrivalsRoute,
+  ShopRoute: ShopRoute,
+  WomenRoute: WomenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
