@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { PageShell } from "@/components/site/PageShell";
 import { SectionEyebrow } from "@/components/site/Section";
 import { ArrowRight } from "lucide-react";
@@ -34,6 +34,3 @@ export function ComingSoon({
     </PageShell>
   );
 }
-
-// Marker to satisfy bundler; this file exports no route.
-export const Route = createFileRoute as never;
