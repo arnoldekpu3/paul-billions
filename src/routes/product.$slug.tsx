@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Heart, ShoppingBag, Minus, Plus } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
 import { ProductCard } from "@/routes/index";
-import { getProduct, products, formatNaira } from "@/lib/mock-products";
+import { getProduct, products, formatNaira, type Product } from "@/lib/mock-products";
 
 export const Route = createFileRoute("/product/$slug")({
   loader: ({ params }) => {
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/product/$slug")({
 });
 
 function ProductPage() {
-  const { product } = Route.useLoaderData();
+  const { product } = Route.useLoaderData() as { product: Product };
   const [size, setSize] = useState(product.sizes[0]);
   const [color, setColor] = useState(product.colors[0]);
   const [qty, setQty] = useState(1);
