@@ -274,7 +274,7 @@ export const deleteRow = createServerFn({ method: "POST" })
     await assertAdmin(supabase, userId);
     if (!SIMPLE_TABLES.includes(data.table)) throw new Error("Bad table");
     const keyCol = data.table === "site_settings" ? "key" : "id";
-    await supabase.from(data.table).delete().eq(keyCol, data.id);
+    await (supabase as any).from(data.table).delete().eq(keyCol, data.id);
     await audit(supabase, userId, "delete", data.table, data.id);
     return { ok: true };
   });
@@ -317,7 +317,7 @@ export const exportBackup = createServerFn({ method: "GET" })
     const tables = ["categories", "products", "orders", "order_items", "coupons", "banners", "testimonials", "newsletter_campaigns", "newsletter_subscribers", "site_settings", "user_roles", "profiles"];
     const snapshot: Record<string, any> = { _meta: { exportedAt: new Date().toISOString(), version: 1 } };
     for (const t of tables) {
-      const { data } = await supabase.from(t).select("*");
+      const { data } = await (supabase as any).from(t).select("*");
       snapshot[t] = data ?? [];
     }
     await audit(supabase, userId, "export_backup", "system", null as any, { tables: tables.length });
@@ -335,7 +335,7 @@ export const restoreBackup = createServerFn({ method: "POST" })
     for (const t of order) {
       const rows = data.snapshot[t];
       if (!Array.isArray(rows) || rows.length === 0) continue;
-      await supabase.from(t).upsert(rows);
+      await (supabase as any).from(t).upsert(rows);
     }
     await audit(supabase, userId, "restore_backup", "system", null as any);
     return { ok: true };
