@@ -8,7 +8,7 @@ import { AdminHeader, Card, Table, Td, Tr, Btn, Input, Textarea, Select, Label, 
 import { useAuth } from "@/lib/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/_admin/products")({ component: ProductsPage });
+export const Route = createFileRoute("/admin/products")({ component: ProductsPage });
 
 function ProductsPage() {
   const [tab, setTab] = useState<"active" | "trash">("active");

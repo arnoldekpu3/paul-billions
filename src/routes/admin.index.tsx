@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { getOverview } from "@/lib/admin.functions";
 import { AdminHeader, Card, Stat, Table, Td, Tr, StatusPill, formatNaira } from "@/components/admin/ui";
 
-export const Route = createFileRoute("/_admin/")({ component: OverviewPage });
+export const Route = createFileRoute("/admin/")({ component: OverviewPage });
 
 function OverviewPage() {
   const fn = useServerFn(getOverview);

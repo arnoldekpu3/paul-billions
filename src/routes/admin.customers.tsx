@@ -7,7 +7,7 @@ import { listUsers, suspendUser, setUserRole, adminResetPassword, adminDeleteUse
 import { AdminHeader, Card, Table, Td, Tr, Btn, Input, formatNaira } from "@/components/admin/ui";
 import { useAuth } from "@/lib/use-auth";
 
-export const Route = createFileRoute("/_admin/customers")({ component: CustomersPage });
+export const Route = createFileRoute("/admin/customers")({ component: CustomersPage });
 
 function CustomersPage() {
   const [search, setSearch] = useState("");

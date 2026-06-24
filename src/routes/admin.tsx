@@ -7,7 +7,7 @@ import {
 import { useAuth, type AppRole } from "@/lib/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/_admin")({
+export const Route = createFileRoute("/admin")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getUser();
@@ -18,20 +18,20 @@ export const Route = createFileRoute("/_admin")({
 
 type NavItem = { to: string; label: string; icon: any; super?: boolean };
 const NAV: NavItem[] = [
-  { to: "/_admin", label: "Overview", icon: LayoutDashboard },
-  { to: "/_admin/products", label: "Products", icon: Package },
-  { to: "/_admin/categories", label: "Categories", icon: FolderTree },
-  { to: "/_admin/orders", label: "Orders", icon: ShoppingCart },
-  { to: "/_admin/customers", label: "Customers", icon: Users },
-  { to: "/_admin/admins", label: "Admins", icon: ShieldCheck, super: true },
-  { to: "/_admin/coupons", label: "Coupons", icon: Tag },
-  { to: "/_admin/banners", label: "Banners", icon: ImageIcon },
-  { to: "/_admin/testimonials", label: "Testimonials", icon: MessageSquare },
-  { to: "/_admin/newsletter", label: "Newsletter", icon: Mail },
-  { to: "/_admin/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/_admin/security", label: "Security", icon: Lock },
-  { to: "/_admin/backups", label: "Backups", icon: Database, super: true },
-  { to: "/_admin/settings", label: "Settings", icon: Settings },
+  { to: "/admin", label: "Overview", icon: LayoutDashboard },
+  { to: "/admin/products", label: "Products", icon: Package },
+  { to: "/admin/categories", label: "Categories", icon: FolderTree },
+  { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { to: "/admin/customers", label: "Customers", icon: Users },
+  { to: "/admin/admins", label: "Admins", icon: ShieldCheck, super: true },
+  { to: "/admin/coupons", label: "Coupons", icon: Tag },
+  { to: "/admin/banners", label: "Banners", icon: ImageIcon },
+  { to: "/admin/testimonials", label: "Testimonials", icon: MessageSquare },
+  { to: "/admin/newsletter", label: "Newsletter", icon: Mail },
+  { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/admin/security", label: "Security", icon: Lock },
+  { to: "/admin/backups", label: "Backups", icon: Database, super: true },
+  { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 function AdminLayout() {
@@ -65,7 +65,7 @@ function AdminLayout() {
         </div>
         <nav className="flex-1 overflow-y-auto py-4">
           {items.map((n) => {
-            const active = pathname === n.to || (n.to !== "/_admin" && pathname.startsWith(n.to));
+            const active = pathname === n.to || (n.to !== "/admin" && pathname.startsWith(n.to));
             return (
               <Link
                 key={n.to}

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { listOrders, getOrder, updateOrder } from "@/lib/admin.functions";
 import { AdminHeader, Card, Table, Td, Tr, Btn, Input, Select, StatusPill, formatNaira, Label, Textarea } from "@/components/admin/ui";
 
-export const Route = createFileRoute("/_admin/orders")({ component: OrdersPage });
+export const Route = createFileRoute("/admin/orders")({ component: OrdersPage });
 
 const STATUSES = ["pending", "processing", "shipped", "delivered", "cancelled", "refunded"];
 
