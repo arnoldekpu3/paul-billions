@@ -144,8 +144,8 @@ function ProductEditor({ product, categories, onClose, onSaved }: { product: any
       const payload = {
         ...form,
         slug: form.slug || form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
-        sizes: form.sizes.split(",").map((s) => s.trim()).filter(Boolean),
-        colors: form.colors.split(",").map((s) => s.trim()).filter(Boolean),
+        sizes: form.sizes.split(",").map((s: string) => s.trim()).filter(Boolean),
+        colors: form.colors.split(",").map((s: string) => s.trim()).filter(Boolean),
         compare_at_kobo: form.compare_at_kobo === "" ? null : Number(form.compare_at_kobo),
       };
       await save({ data: payload });
