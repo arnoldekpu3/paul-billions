@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ShoppingBag, User, Menu, X } from "lucide-react";
+import { ShoppingBag, User, Menu, X, Shield } from "lucide-react";
+import { useAuth } from "@/lib/use-auth";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -13,6 +14,7 @@ const NAV = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -61,6 +63,11 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-1 justify-self-end">
+            {isAdmin && (
+              <Link to={"/admin" as any} aria-label="Admin" className="p-2 text-gold hover:text-foreground transition hidden sm:inline-flex" title="Admin dashboard">
+                <Shield className="h-[18px] w-[18px]" />
+              </Link>
+            )}
             <Link to="/account" aria-label="Account" className="p-2 hover:text-gold transition hidden sm:inline-flex">
               <User className="h-[18px] w-[18px]" />
             </Link>
