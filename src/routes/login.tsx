@@ -1,6 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -9,6 +11,45 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [busy, setBusy] = useState(false);
+  const nav = useNavigate();
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email, password,
+          options: { emailRedirectTo: window.location.origin, data: { full_name: fullName } },
+        });
+        if (error) throw error;
+        toast.success("Account created — check your email if confirmation is required.");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Signed in");
+        await supabase.from("login_history").insert({ email, success: true, user_agent: navigator.userAgent } as any);
+        nav({ to: "/account" });
+      }
+    } catch (err: any) {
+      toast.error(err.message ?? "Auth failed");
+      await supabase.from("login_history").insert({ email, success: false, user_agent: navigator.userAgent } as any).then(() => {}, () => {});
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function google() {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + "/account" },
+    });
+    if (error) toast.error(error.message);
+  }
 
   return (
     <PageShell>
@@ -18,23 +59,20 @@ function LoginPage() {
           <h1 className="font-display text-4xl">{mode === "signin" ? "Sign In" : "Create Account"}</h1>
         </div>
 
-        <button className="w-full border border-border px-5 py-3.5 text-sm font-medium hover:border-foreground transition flex items-center justify-center gap-3">
-          <GoogleIcon />
-          Continue with Google
+        <button onClick={google} className="w-full border border-border px-5 py-3.5 text-sm font-medium hover:border-foreground transition flex items-center justify-center gap-3">
+          <GoogleIcon /> Continue with Google
         </button>
 
         <div className="flex items-center gap-3 my-6 text-xs tracking-luxe uppercase text-foreground/50">
           <div className="flex-1 h-px bg-border" /> or <div className="flex-1 h-px bg-border" />
         </div>
 
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
-          {mode === "signup" && (
-            <Field label="Full name" type="text" />
-          )}
-          <Field label="Email" type="email" />
-          <Field label="Password" type="password" />
-          <button className="w-full bg-black text-white px-8 py-4 text-xs tracking-luxe uppercase font-semibold hover:bg-gold hover:text-black transition-colors">
-            {mode === "signin" ? "Sign in" : "Create account"}
+        <form onSubmit={submit} className="space-y-4">
+          {mode === "signup" && <Field label="Full name" value={fullName} onChange={setFullName} type="text" />}
+          <Field label="Email" value={email} onChange={setEmail} type="email" required />
+          <Field label="Password" value={password} onChange={setPassword} type="password" required />
+          <button disabled={busy} className="w-full bg-black text-white px-8 py-4 text-xs tracking-luxe uppercase font-semibold hover:bg-gold hover:text-black transition-colors disabled:opacity-50">
+            {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
           </button>
         </form>
 
@@ -53,11 +91,11 @@ function LoginPage() {
   );
 }
 
-function Field({ label, type }: { label: string; type: string }) {
+function Field({ label, type, value, onChange, required }: { label: string; type: string; value: string; onChange: (v: string) => void; required?: boolean }) {
   return (
     <label className="block">
       <span className="text-[10px] tracking-luxe uppercase text-foreground/60 block mb-1.5">{label}</span>
-      <input type={type} className="w-full border border-border px-4 py-3 text-sm focus:border-gold focus:outline-none" />
+      <input required={required} value={value} onChange={(e) => onChange(e.target.value)} type={type} className="w-full border border-border px-4 py-3 text-sm focus:border-gold focus:outline-none" />
     </label>
   );
 }
