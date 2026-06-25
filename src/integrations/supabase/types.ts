@@ -151,9 +151,13 @@ export type Database = {
           color: string | null
           created_at: string
           id: string
-          product_id: string
+          product_id: string | null
+          product_image: string | null
+          product_name: string | null
+          product_slug: string | null
           qty: number
           size: string | null
+          unit_price_kobo: number | null
           updated_at: string
           user_id: string
         }
@@ -161,9 +165,13 @@ export type Database = {
           color?: string | null
           created_at?: string
           id?: string
-          product_id: string
+          product_id?: string | null
+          product_image?: string | null
+          product_name?: string | null
+          product_slug?: string | null
           qty?: number
           size?: string | null
+          unit_price_kobo?: number | null
           updated_at?: string
           user_id: string
         }
@@ -171,9 +179,13 @@ export type Database = {
           color?: string | null
           created_at?: string
           id?: string
-          product_id?: string
+          product_id?: string | null
+          product_image?: string | null
+          product_name?: string | null
+          product_slug?: string | null
           qty?: number
           size?: string | null
+          unit_price_kobo?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -395,6 +407,8 @@ export type Database = {
           name_snapshot: string
           order_id: string
           product_id: string | null
+          product_image: string | null
+          product_slug: string | null
           qty: number
           size: string | null
           unit_price_kobo: number
@@ -405,6 +419,8 @@ export type Database = {
           name_snapshot: string
           order_id: string
           product_id?: string | null
+          product_image?: string | null
+          product_slug?: string | null
           qty: number
           size?: string | null
           unit_price_kobo: number
@@ -415,6 +431,8 @@ export type Database = {
           name_snapshot?: string
           order_id?: string
           product_id?: string | null
+          product_image?: string | null
+          product_slug?: string | null
           qty?: number
           size?: string | null
           unit_price_kobo?: number
@@ -612,7 +630,8 @@ export type Database = {
           created_at: string
           id: string
           is_approved: boolean
-          product_id: string
+          product_id: string | null
+          product_slug: string | null
           rating: number
           title: string | null
           updated_at: string
@@ -623,7 +642,8 @@ export type Database = {
           created_at?: string
           id?: string
           is_approved?: boolean
-          product_id: string
+          product_id?: string | null
+          product_slug?: string | null
           rating: number
           title?: string | null
           updated_at?: string
@@ -634,7 +654,8 @@ export type Database = {
           created_at?: string
           id?: string
           is_approved?: boolean
-          product_id?: string
+          product_id?: string | null
+          product_slug?: string | null
           rating?: number
           title?: string | null
           updated_at?: string
@@ -655,24 +676,36 @@ export type Database = {
           color: string | null
           created_at: string
           id: string
-          product_id: string
+          product_id: string | null
+          product_image: string | null
+          product_name: string | null
+          product_slug: string | null
           size: string | null
+          unit_price_kobo: number | null
           user_id: string
         }
         Insert: {
           color?: string | null
           created_at?: string
           id?: string
-          product_id: string
+          product_id?: string | null
+          product_image?: string | null
+          product_name?: string | null
+          product_slug?: string | null
           size?: string | null
+          unit_price_kobo?: number | null
           user_id: string
         }
         Update: {
           color?: string | null
           created_at?: string
           id?: string
-          product_id?: string
+          product_id?: string | null
+          product_image?: string | null
+          product_name?: string | null
+          product_slug?: string | null
           size?: string | null
+          unit_price_kobo?: number | null
           user_id?: string
         }
         Relationships: [
@@ -764,19 +797,31 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          product_id: string
+          product_id: string | null
+          product_image: string | null
+          product_name: string | null
+          product_slug: string | null
+          unit_price_kobo: number | null
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          product_id: string
+          product_id?: string | null
+          product_image?: string | null
+          product_name?: string | null
+          product_slug?: string | null
+          unit_price_kobo?: number | null
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          product_id?: string
+          product_id?: string | null
+          product_image?: string | null
+          product_name?: string | null
+          product_slug?: string | null
+          unit_price_kobo?: number | null
           user_id?: string
         }
         Relationships: [
