@@ -17,6 +17,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { isAdmin } = useAuth();
+  const cartCount = useCartCount();
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
