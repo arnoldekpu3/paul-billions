@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ShoppingBag, User, Menu, X, Shield } from "lucide-react";
 import { useAuth } from "@/lib/use-auth";
+import { useCartCount } from "@/lib/use-cart";
+
 
 const NAV = [
   { to: "/", label: "Home" },
