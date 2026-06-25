@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ShoppingBag, User, Menu, X, Shield } from "lucide-react";
 import { useAuth } from "@/lib/use-auth";
+import { useCartCount } from "@/lib/use-cart";
+
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -15,6 +17,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { isAdmin } = useAuth();
+  const cartCount = useCartCount();
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -71,10 +75,16 @@ export function Header() {
             <Link to="/account" aria-label="Account" className="p-2 hover:text-gold transition hidden sm:inline-flex">
               <User className="h-[18px] w-[18px]" />
             </Link>
-            <Link to="/cart" aria-label="Cart" className="p-2 hover:text-gold transition">
+            <Link to="/cart" aria-label="Cart" className="p-2 hover:text-gold transition relative">
               <ShoppingBag className="h-[18px] w-[18px]" />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-gold text-black text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </div>
+
         </div>
       </div>
 

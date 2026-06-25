@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, Plus, X, BookmarkPlus } from "lucide-react";
 import { PageShell } from "@/components/site/PageShell";
-import { products, formatNaira } from "@/lib/mock-products";
+import { formatNaira } from "@/lib/mock-products";
+import { useCart } from "@/lib/use-cart";
+import { useAuth } from "@/lib/use-auth";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
@@ -10,13 +11,11 @@ export const Route = createFileRoute("/cart")({
 });
 
 function CartPage() {
-  // demo data — wires to DB in Phase 3
-  const [items, setItems] = useState([
-    { ...products[0], qty: 1, size: "M", color: "Black" },
-    { ...products[2], qty: 1, size: "42", color: "Brown" },
-  ]);
+  const { items, updateQty, remove, saveForLater, loading } = useCart();
+  const { user } = useAuth();
 
-  const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const subtotalKobo = items.reduce((s, i) => s + i.unit_price_kobo * i.qty, 0);
+  const subtotal = subtotalKobo / 100;
   const shipping = subtotal > 150000 ? 0 : 5000;
   const total = subtotal + shipping;
 
@@ -28,36 +27,63 @@ function CartPage() {
           <h1 className="font-display text-4xl sm:text-5xl">Shopping Cart</h1>
         </div>
 
-        {items.length === 0 ? (
+        {loading ? (
+          <div className="py-20 text-center text-foreground/60">Loading…</div>
+        ) : items.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-foreground/60 mb-6">Your cart is empty.</p>
-            <Link to="/shop" className="inline-block bg-black text-white px-8 py-4 text-xs tracking-luxe uppercase">Continue shopping</Link>
+            <Link to="/shop" className="inline-block bg-black text-white px-8 py-4 text-xs tracking-luxe uppercase">
+              Continue shopping
+            </Link>
           </div>
         ) : (
           <div className="grid lg:grid-cols-[1fr_360px] gap-10">
             <div className="divide-y divide-border border-t border-b border-border">
-              {items.map((it, idx) => (
-                <div key={idx} className="py-5 flex gap-4 sm:gap-6">
-                  <Link to="/product/$slug" params={{ slug: it.slug }} className="w-24 sm:w-28 aspect-[3/4] bg-muted overflow-hidden shrink-0">
-                    <img src={it.image} alt={it.name} className="w-full h-full object-cover" />
+              {items.map((it) => (
+                <div key={it.id} className="py-5 flex gap-4 sm:gap-6">
+                  <Link
+                    to="/product/$slug"
+                    params={{ slug: it.product_slug }}
+                    className="w-24 sm:w-28 aspect-[3/4] bg-muted overflow-hidden shrink-0"
+                  >
+                    <img src={it.product_image} alt={it.product_name} className="w-full h-full object-cover" />
                   </Link>
                   <div className="flex-1 flex flex-col">
                     <div className="flex justify-between gap-3">
                       <div>
-                        <h3 className="font-medium text-sm sm:text-base">{it.name}</h3>
-                        <p className="text-xs text-foreground/60 mt-1">{it.size} · {it.color}</p>
+                        <h3 className="font-medium text-sm sm:text-base">{it.product_name}</h3>
+                        <p className="text-xs text-foreground/60 mt-1">
+                          {it.size || "—"} · {it.color || "—"}
+                        </p>
                       </div>
-                      <button onClick={() => setItems(items.filter((_, i) => i !== idx))} aria-label="Remove" className="text-foreground/50 hover:text-foreground">
+                      <button onClick={() => remove(it.id)} aria-label="Remove" className="text-foreground/50 hover:text-foreground">
                         <X className="h-4 w-4" />
                       </button>
                     </div>
-                    <div className="mt-auto flex items-end justify-between">
-                      <div className="inline-flex items-center border border-border">
-                        <button onClick={() => setItems(items.map((x, i) => i === idx ? { ...x, qty: Math.max(1, x.qty - 1) } : x))} className="p-2 hover:bg-muted"><Minus className="h-3.5 w-3.5" /></button>
-                        <span className="w-10 text-center text-sm">{it.qty}</span>
-                        <button onClick={() => setItems(items.map((x, i) => i === idx ? { ...x, qty: x.qty + 1 } : x))} className="p-2 hover:bg-muted"><Plus className="h-3.5 w-3.5" /></button>
+                    <div className="mt-auto flex flex-wrap items-end justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="inline-flex items-center border border-border">
+                          <button
+                            onClick={() => updateQty(it.id, Math.max(1, it.qty - 1))}
+                            className="p-2 hover:bg-muted"
+                          >
+                            <Minus className="h-3.5 w-3.5" />
+                          </button>
+                          <span className="w-10 text-center text-sm">{it.qty}</span>
+                          <button onClick={() => updateQty(it.id, it.qty + 1)} className="p-2 hover:bg-muted">
+                            <Plus className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                        {user && (
+                          <button
+                            onClick={() => saveForLater(it)}
+                            className="text-[11px] tracking-luxe uppercase text-foreground/60 hover:text-gold inline-flex items-center gap-1"
+                          >
+                            <BookmarkPlus className="h-3 w-3" /> Save for later
+                          </button>
+                        )}
                       </div>
-                      <p className="text-sm font-medium">{formatNaira(it.price * it.qty)}</p>
+                      <p className="text-sm font-medium">{formatNaira((it.unit_price_kobo * it.qty) / 100)}</p>
                     </div>
                   </div>
                 </div>
@@ -76,9 +102,20 @@ function CartPage() {
               >
                 Checkout
               </Link>
-              <Link to="/shop" className="mt-3 block text-center text-xs tracking-luxe uppercase text-foreground/60 hover:text-foreground">
+              <Link
+                to="/shop"
+                className="mt-3 block text-center text-xs tracking-luxe uppercase text-foreground/60 hover:text-foreground"
+              >
                 Continue shopping
               </Link>
+              {!user && (
+                <p className="mt-5 text-center text-xs text-foreground/60">
+                  <Link to="/login" className="text-gold underline">
+                    Sign in
+                  </Link>{" "}
+                  to save your cart across devices.
+                </p>
+              )}
             </aside>
           </div>
         )}
@@ -90,7 +127,8 @@ function CartPage() {
 function Row({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
     <div className={`flex justify-between text-sm py-1.5 ${bold ? "font-semibold text-base" : "text-foreground/80"}`}>
-      <span>{label}</span><span>{value}</span>
+      <span>{label}</span>
+      <span>{value}</span>
     </div>
   );
 }
