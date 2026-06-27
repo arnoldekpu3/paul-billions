@@ -61,7 +61,7 @@ function AdminLayout() {
     return <ClaimScreen email={user.email ?? ""} />;
   }
 
-  const items = NAV.filter((n) => !n.super || isSuperAdmin);
+  const items = NAV.filter((n) => can(roles, n.permission));
 
   return (
     <div className="min-h-screen bg-[#0b0b0b] text-white flex">
