@@ -5,29 +5,31 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { listAuditLogs, listLoginHistory } from "@/lib/admin.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/use-auth";
 import { AdminHeader, Card, Table, Td, Tr, Btn } from "@/components/admin/ui";
 
 export const Route = createFileRoute("/admin/security")({ component: SecurityPage });
 
 function SecurityPage() {
-  const [tab, setTab] = useState<"audit" | "logins" | "mfa">("audit");
+  const { isSuperAdmin } = useAuth();
+  const [tab, setTab] = useState<"audit" | "logins" | "mfa">(isSuperAdmin ? "audit" : "mfa");
   const audit = useServerFn(listAuditLogs);
   const logins = useServerFn(listLoginHistory);
-  const { data: auditRows } = useQuery({ queryKey: ["audit"], queryFn: () => audit(), enabled: tab === "audit" });
-  const { data: loginRows } = useQuery({ queryKey: ["logins"], queryFn: () => logins(), enabled: tab === "logins" });
+  const { data: auditRows } = useQuery({ queryKey: ["audit"], queryFn: () => audit(), enabled: isSuperAdmin && tab === "audit" });
+  const { data: loginRows } = useQuery({ queryKey: ["logins"], queryFn: () => logins(), enabled: isSuperAdmin && tab === "logins" });
 
   return (
     <>
-      <AdminHeader title="Security" subtitle="Audit logs, login history, and two-factor auth" />
+      <AdminHeader title="Security" subtitle={isSuperAdmin ? "Audit logs, login history, and two-factor auth" : "Two-factor authentication for your account"} />
       <div className="flex gap-1 mb-6 border border-white/10 w-fit">
-        {(["audit", "logins", "mfa"] as const).map((t) => (
+        {(isSuperAdmin ? (["audit", "logins", "mfa"] as const) : (["mfa"] as const)).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 text-[11px] uppercase tracking-[0.2em] ${tab === t ? "bg-gold text-black" : "text-white/60"}`}>
             {t === "audit" ? "Audit log" : t === "logins" ? "Login history" : "Two-factor auth"}
           </button>
         ))}
       </div>
 
-      {tab === "audit" && (
+      {tab === "audit" && isSuperAdmin && (
         <Card className="p-0">
           <Table headers={["When", "Actor", "Action", "Entity", "Metadata"]}>
             {(auditRows ?? []).map((r: any) => (
@@ -44,7 +46,7 @@ function SecurityPage() {
         </Card>
       )}
 
-      {tab === "logins" && (
+      {tab === "logins" && isSuperAdmin && (
         <Card className="p-0">
           <Table headers={["When", "Email", "Success", "User Agent"]}>
             {(loginRows ?? []).map((r: any) => (

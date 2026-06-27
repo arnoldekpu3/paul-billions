@@ -10,7 +10,7 @@ export const Route = createFileRoute("/admin/banners")({ component: () => (
       { key: "subtitle", label: "Subtitle" },
       { key: "image_url", label: "Image", type: "image", bucket: "banners" },
       { key: "link", label: "Link" },
-      { key: "position", label: "Position", type: "select", options: ["hero", "secondary", "footer"] },
+      { key: "position", label: "Position", type: "select", options: ["hero", "secondary", "footer", "announcement"] },
       { key: "sort_order", label: "Sort order", type: "number" },
       { key: "is_active", label: "Active", type: "boolean" },
     ]}
