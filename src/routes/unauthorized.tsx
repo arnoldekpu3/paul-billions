@@ -9,7 +9,7 @@ export const Route = createFileRoute("/unauthorized")({
 
 function UnauthorizedPage() {
   const { user, roles } = useAuth();
-  const from = useRouterState({ select: (s) => s.location.search as any })?.from as string | undefined;
+  const from = useRouterState({ select: (s) => (s.location.search as any)?.from as string | undefined });
 
   return (
     <div className="min-h-screen bg-[#0b0b0b] text-white flex items-center justify-center px-4">
