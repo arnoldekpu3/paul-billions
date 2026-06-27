@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
@@ -37,6 +38,11 @@ import { Route as AdminBackupsRouteImport } from './routes/admin.backups'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as AdminAdminsRouteImport } from './routes/admin.admins'
 
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/admins': typeof AdminAdminsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/backups': typeof AdminBackupsRoute
@@ -213,6 +220,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/admins': typeof AdminAdminsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/backups': typeof AdminBackupsRoute
@@ -243,6 +251,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/shop': typeof ShopRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/admin/admins': typeof AdminAdminsRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/backups': typeof AdminBackupsRoute
@@ -274,6 +283,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/shop'
+    | '/unauthorized'
     | '/admin/admins'
     | '/admin/analytics'
     | '/admin/backups'
@@ -302,6 +312,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/shop'
+    | '/unauthorized'
     | '/admin/admins'
     | '/admin/analytics'
     | '/admin/backups'
@@ -331,6 +342,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/shop'
+    | '/unauthorized'
     | '/admin/admins'
     | '/admin/analytics'
     | '/admin/backups'
@@ -361,12 +373,20 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ShopRoute: typeof ShopRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
   OrderIdRoute: typeof OrderIdRoute
   ProductSlugRoute: typeof ProductSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shop': {
       id: '/shop'
       path: '/shop'
@@ -607,6 +627,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ShopRoute: ShopRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   OrderIdRoute: OrderIdRoute,
   ProductSlugRoute: ProductSlugRoute,
 }

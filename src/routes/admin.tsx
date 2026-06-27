@@ -40,14 +40,21 @@ function AdminLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    if (!loading && user && !isAdmin) nav({ to: "/" });
-  }, [loading, user, isAdmin, nav]);
+    if (loading || !user) return;
+    if (isAdmin) return;
+    // Customer signed in but no admin role — check if super admin can be claimed
+    supabase.from("user_roles").select("user_id", { count: "exact", head: true }).eq("role", "super_admin")
+      .then(({ count }) => {
+        if ((count ?? 0) === 0) return; // show ClaimScreen below
+        nav({ to: "/unauthorized", search: { from: pathname } as any });
+      });
+  }, [loading, user, isAdmin, nav, pathname]);
 
   if (loading) {
     return <div className="min-h-screen bg-[#0b0b0b] text-white flex items-center justify-center text-sm">Loading admin…</div>;
   }
 
-  // No admin role yet — show claim screen
+  // No admin role yet — show claim screen (gated by RPC; safe if already claimed)
   if (user && !isAdmin) {
     return <ClaimScreen email={user.email ?? ""} />;
   }
