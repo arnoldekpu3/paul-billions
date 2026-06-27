@@ -5,6 +5,7 @@ import {
   MessageSquare, Mail, FolderTree, BarChart3, Lock, Database, Settings, LogOut, Crown,
 } from "lucide-react";
 import { useAuth, type AppRole } from "@/lib/use-auth";
+import { can, type Permission } from "@/lib/permissions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin")({
@@ -16,23 +17,24 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-type NavItem = { to: string; label: string; icon: any; super?: boolean };
+type NavItem = { to: string; label: string; icon: any; permission: Permission };
 const NAV: NavItem[] = [
-  { to: "/admin", label: "Overview", icon: LayoutDashboard },
-  { to: "/admin/products", label: "Products", icon: Package },
-  { to: "/admin/categories", label: "Categories", icon: FolderTree },
-  { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
-  { to: "/admin/customers", label: "Customers", icon: Users },
-  { to: "/admin/admins", label: "Admins", icon: ShieldCheck, super: true },
-  { to: "/admin/coupons", label: "Coupons", icon: Tag },
-  { to: "/admin/banners", label: "Banners", icon: ImageIcon },
-  { to: "/admin/testimonials", label: "Testimonials", icon: MessageSquare },
-  { to: "/admin/newsletter", label: "Newsletter", icon: Mail },
-  { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-  { to: "/admin/security", label: "Security", icon: Lock },
-  { to: "/admin/backups", label: "Backups", icon: Database, super: true },
-  { to: "/admin/settings", label: "Settings", icon: Settings },
+  { to: "/admin", label: "Overview", icon: LayoutDashboard, permission: "admin.access" },
+  { to: "/admin/products", label: "Products", icon: Package, permission: "products.manage" },
+  { to: "/admin/categories", label: "Categories", icon: FolderTree, permission: "categories.manage" },
+  { to: "/admin/orders", label: "Orders", icon: ShoppingCart, permission: "orders.manage" },
+  { to: "/admin/customers", label: "Customers", icon: Users, permission: "customers.view" },
+  { to: "/admin/admins", label: "Admins", icon: ShieldCheck, permission: "admins.manage" },
+  { to: "/admin/coupons", label: "Coupons", icon: Tag, permission: "coupons.manage" },
+  { to: "/admin/banners", label: "Banners", icon: ImageIcon, permission: "banners.manage" },
+  { to: "/admin/testimonials", label: "Testimonials", icon: MessageSquare, permission: "testimonials.manage" },
+  { to: "/admin/newsletter", label: "Newsletter", icon: Mail, permission: "newsletter.manage" },
+  { to: "/admin/analytics", label: "Analytics", icon: BarChart3, permission: "analytics.view" },
+  { to: "/admin/security", label: "Security", icon: Lock, permission: "mfa.self" },
+  { to: "/admin/backups", label: "Backups", icon: Database, permission: "backups.manage" },
+  { to: "/admin/settings", label: "Settings", icon: Settings, permission: "settings.manage" },
 ];
+
 
 function AdminLayout() {
   const { user, loading, isAdmin, isSuperAdmin, roles } = useAuth();
@@ -59,7 +61,7 @@ function AdminLayout() {
     return <ClaimScreen email={user.email ?? ""} />;
   }
 
-  const items = NAV.filter((n) => !n.super || isSuperAdmin);
+  const items = NAV.filter((n) => can(roles, n.permission));
 
   return (
     <div className="min-h-screen bg-[#0b0b0b] text-white flex">
