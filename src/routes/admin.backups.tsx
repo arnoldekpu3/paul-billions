@@ -6,7 +6,12 @@ import { exportBackup, restoreBackup } from "@/lib/admin.functions";
 import { AdminHeader, Card, Btn, Input, Textarea, Label } from "@/components/admin/ui";
 import { useAuth } from "@/lib/use-auth";
 
-export const Route = createFileRoute("/admin/backups")({ component: BackupsPage });
+import { requirePermission } from "@/lib/route-guards";
+
+export const Route = createFileRoute("/admin/backups")({
+  beforeLoad: async ({ location }) => { await requirePermission("backups.manage", location.pathname); },
+  component: BackupsPage,
+});
 
 function BackupsPage() {
   const exp = useServerFn(exportBackup);
