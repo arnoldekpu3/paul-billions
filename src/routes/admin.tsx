@@ -1,4 +1,4 @@
-import { Link, Outlet, useRouterState, useNavigate, createFileRoute, redirect } from "@tanstack/react-router";
+import { Link, Outlet, useRouterState, useNavigate, createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import {
   LayoutDashboard, Package, ShoppingCart, Users, ShieldCheck, Tag, Image as ImageIcon,
