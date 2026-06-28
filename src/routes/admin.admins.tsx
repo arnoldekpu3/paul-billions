@@ -7,7 +7,12 @@ import { listUsers, setUserRole, suspendUser, adminDeleteUser } from "@/lib/admi
 import { AdminHeader, Card, Table, Td, Tr, Btn, Input, Select, Label } from "@/components/admin/ui";
 import { useAuth } from "@/lib/use-auth";
 
-export const Route = createFileRoute("/admin/admins")({ component: AdminsPage });
+import { requirePermission } from "@/lib/route-guards";
+
+export const Route = createFileRoute("/admin/admins")({
+  beforeLoad: async ({ location }) => { await requirePermission("admins.manage", location.pathname); },
+  component: AdminsPage,
+});
 
 function AdminsPage() {
   const [search, setSearch] = useState("");

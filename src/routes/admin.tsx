@@ -1,4 +1,4 @@
-import { Link, Outlet, useRouterState, useNavigate, createFileRoute, redirect } from "@tanstack/react-router";
+import { Link, Outlet, useRouterState, useNavigate, createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import {
   LayoutDashboard, Package, ShoppingCart, Users, ShieldCheck, Tag, Image as ImageIcon,
@@ -7,12 +7,12 @@ import {
 import { useAuth, type AppRole } from "@/lib/use-auth";
 import { can, type Permission } from "@/lib/permissions";
 import { supabase } from "@/integrations/supabase/client";
+import { requirePermission } from "@/lib/route-guards";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
-  beforeLoad: async () => {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) throw redirect({ to: "/login" });
+  beforeLoad: async ({ location }) => {
+    await requirePermission("admin.access", location.pathname);
   },
   component: AdminLayout,
 });
