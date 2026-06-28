@@ -8,6 +8,11 @@ import { formatNaira } from "@/lib/mock-products";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/account")({
+  ssr: false,
+  beforeLoad: async ({ location }) => {
+    const { requirePermission } = await import("@/lib/route-guards");
+    await requirePermission("account.manage", location.pathname);
+  },
   component: AccountPage,
   head: () => ({ meta: [{ title: "My Account — Paul Billions" }] }),
 });
